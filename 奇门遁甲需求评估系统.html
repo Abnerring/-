@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇门遁甲需求评估系统V1.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c2461, #1e3799, #4a69bd);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.5);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            background: linear-gradient(to right, #f6d365, #fda085);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #fda085;
+            font-style: italic;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            flex: 1;
+            background: rgba(12, 36, 97, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(253, 187, 45, 0.3);
+        }
+        
+        .result-section {
+            flex: 1;
+            background: rgba(30, 55, 153, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(253, 187, 45, 0.3);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #fda085;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #fda085;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #0c2461, #1e3799);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: linear-gradient(to right, #1e3799, #0c2461);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .result-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 300px;
+        }
+        
+        .result-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .result-title {
+            font-weight: bold;
+            color: #fda085;
+            margin-bottom: 5px;
+        }
+        
+        .divination-result {
+            text-align: center;
+            font-size: 1.5rem;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .good {
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+        
+        .neutral {
+            color: #FFC107;
+            border: 2px solid #FFC107;
+        }
+        
+        .bad {
+            color: #F44336;
+            border: 2px solid #F44336;
+        }
+        
+        .qimen-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+        
+        .qimen-cell {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #fda085;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .qimen-cell.center {
+            background: rgba(253, 160, 133, 0.2);
+        }
+        
+        .qimen-cell.good {
+            border-color: #4CAF50;
+        }
+        
+        .qimen-cell.bad {
+            border-color: #F44336;
+        }
+        
+        .qimen-title {
+            font-weight: bold;
+        }
+        
+        .strategy-section {
+            background: rgba(12, 36, 97, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(253, 187, 45, 0.3);
+            margin-top: 30px;
+        }
+        
+        .strategy-content {
+            display: none;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .strategy-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .strategy-title {
+            font-weight: bold;
+            color: #fda085;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .strategy-desc {
+            margin-left: 10px;
+        }
+        
+        .ritual-item {
+            padding: 10px;
+            margin: 10px 0;
+            background: rgba(30, 55, 153, 0.2);
+            border-left: 3px solid #fda085;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            font-style: italic;
+            color: #fda085;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>奇门遁甲需求评估系统V1.0</h1>
+            <p class="subtitle">融合奇门遁甲智慧与科学决策的需求评估引擎</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <h2>需求信息</h2>
+                
+                <div class="form-group">
+                    <label for="requirementName">需求名称</label>
+                    <input type="text" id="requirementName" placeholder="请输入需求名称">
+                </div>
+                
+                <div class="form-group">
+                    <label for="requirementDesc">需求描述</label>
+                    <textarea id="requirementDesc" placeholder="请简要描述需求内容"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="requirementType">需求类型</label>
+                    <select id="requirementType">
+                        <option value="功能开发">功能开发</option>
+                        <option value="性能优化">性能优化</option>
+                        <option value="界面设计">界面设计</option>
+                        <option value="系统集成">系统集成</option>
+                        <option value="问题修复">问题修复</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="urgency">紧急程度</label>
+                    <select id="urgency">
+                        <option value="低">低 - 可延后处理</option>
+                        <option value="中">中 - 正常处理</option>
+                        <option value="高">高 - 需要优先处理</option>
+                        <option value="紧急">紧急 - 立即处理</option>
+                    </select>
+                </div>
+                
+                <button id="evaluateBtn">启动奇门遁甲评估</button>
+            </div>
+            
+            <div class="result-section">
+                <h2>奇门遁甲评估结果</h2>
+                
+                <div class="result-box">
+                    <div class="qimen-diagram" id="qimenDiagram">
+                        <!-- 奇门遁甲九宫图将通过JS动态生成 -->
+                    </div>
+                    
+                    <div id="qimenResult" class="result-item">
+                        <div class="result-title">奇门局分析</div>
+                        <div>等待起局...</div>
+                    </div>
+                    
+                    <div id="doorResult" class="result-item">
+                        <div class="result-title">八门分析</div>
+                        <div>等待分析...</div>
+                    </div>
+                    
+                    <div id="starResult" class="result-item">
+                        <div class="result-title">九星分析</div>
+                        <div>等待分析...</div>
+                    </div>
+                    
+                    <div id="divinationResult" class="divination-result">
+                        请提交需求进行奇门遁甲占卜
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="strategy-section">
+            <h2>奇门遁甲应对策略</h2>
+            <div id="strategyContent" class="strategy-content">
+                <div class="strategy-item">
+                    <div class="strategy-title">奇门布局建议</div>
+                    <div id="layoutStrategy" class="strategy-desc">等待分析...</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">最佳行动时机</div>
+                    <div id="timingStrategy" class="strategy-desc">等待分析...</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">方位选择建议</div>
+                    <div id="directionStrategy" class="strategy-desc">等待分析...</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">奇门化解方法</div>
+                    <div id="resolveStrategy" class="strategy-desc">
+                        <div class="ritual-item">等待分析...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>奇门遁甲秘传 • 科学决策系统 • 天时地利，奇门助阵</p>
+        </footer>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const evaluateBtn = document.getElementById('evaluateBtn');
+        const qimenDiagram = document.getElementById('qimenDiagram');
+        const qimenResult = document.getElementById('qimenResult');
+        const doorResult = document.getElementById('doorResult');
+        const starResult = document.getElementById('starResult');
+        const divinationResult = document.getElementById('divinationResult');
+        
+        // 应对策略元素
+        const strategyContent = document.getElementById('strategyContent');
+        const layoutStrategy = document.getElementById('layoutStrategy');
+        const timingStrategy = document.getElementById('timingStrategy');
+        const directionStrategy = document.getElementById('directionStrategy');
+        const resolveStrategy = document.getElementById('resolveStrategy');
+        
+        // 奇门遁甲基础数据
+        const eightDoors = ['休门', '生门', '伤门', '杜门', '景门', '死门', '惊门', '开门'];
+        const nineStars = ['天蓬', '天芮', '天冲', '天辅', '天禽', '天心', '天柱', '天任', '天英'];
+        const eightGods = ['值符', '腾蛇', '太阴', '六合', '白虎', '玄武', '九地', '九天'];
+        const directions = ['东', '东南', '南', '西南', '中', '西', '西北', '北', '东北'];
+        
+        // 初始化奇门九宫图
+        function initQimenDiagram() {
+            qimenDiagram.innerHTML = '';
+            
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'qimen-cell';
+                if (i === 4) cell.classList.add('center');
+                
+                const title = document.createElement('div');
+                title.className = 'qimen-title';
+                title.textContent = directions[i];
+                
+                const content = document.createElement('div');
+                content.className = 'qimen-content';
+                content.textContent = '待定';
+                
+                cell.appendChild(title);
+                cell.appendChild(content);
+                qimenDiagram.appendChild(cell);
+            }
+        }
+        
+        // 玄学评估逻辑
+        evaluateBtn.addEventListener('click', () => {
+            // 获取输入值
+            const requirementName = document.getElementById('requirementName').value || '未命名需求';
+            const requirementDesc = document.getElementById('requirementDesc').value || '无描述';
+            const requirementType = document.getElementById('requirementType').value;
+            const urgency = document.getElementById('urgency').value;
+            
+            // 使用当前时间自动起局
+            const now = new Date();
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            
+            // 生成奇门遁甲局
+            const qimenAnalysis = analyzeQimen(requirementType, urgency, hour, minute);
+            
+            // 更新九宫图
+            updateQimenDiagram(qimenAnalysis);
+            
+            // 显示分析结果
+            qimenResult.innerHTML = `<div class="result-title">奇门局分析</div><div>${qimenAnalysis.text}</div>`;
+            doorResult.innerHTML = `<div class="result-title">八门分析</div><div>${qimenAnalysis.doorAnalysis}</div>`;
+            starResult.innerHTML = `<div class="result-title">九星分析</div><div>${qimenAnalysis.starAnalysis}</div>`;
+            
+            // 综合占卜结果
+            const divination = getDivinationResult(qimenAnalysis.score);
+            divinationResult.textContent = divination.text;
+            divinationResult.className = 'divination-result ' + divination.class;
+            
+            // 显示应对策略
+            showStrategy(qimenAnalysis);
+            
+            // 显示策略内容
+            strategyContent.style.display = 'block';
+        });
+        
+        // 奇门遁甲分析函数
+        function analyzeQimen(type, urgency, hour, minute) {
+            // 根据时间计算局数（简化版）
+            const period = Math.floor(hour / 2) + 1; // 时辰
+            const day = new Date().getDate();
+            const solarTerm = getSolarTerm(day);
+            
+            // 根据需求类型和紧急程度确定基础分数
+            let baseScore = 50;
+            
+            switch(urgency) {
+                case '低': baseScore += 10; break;
+                case '中': baseScore += 20; break;
+                case '高': baseScore += 30; break;
+                case '紧急': baseScore += 40; break;
+            }
+            
+            switch(type) {
+                case '功能开发': baseScore += 15; break;
+                case '性能优化': baseScore += 25; break;
+                case '界面设计': baseScore += 20; break;
+                case '系统集成': baseScore += 10; break;
+                case '问题修复': baseScore += 5; break;
+            }
+            
+            // 时辰影响
+            const hourEffect = (hour % 12) * 3;
+            baseScore += hourEffect;
+            
+            // 确保分数在0-100之间
+            baseScore = Math.max(0, Math.min(100, baseScore));
+            
+            // 确定吉凶
+            let doorIndex, starIndex, godIndex;
+            let doorAnalysis, starAnalysis;
+            
+            if (baseScore >= 80) {
+                doorIndex = 1; // 生门
+                starIndex = 3; // 天辅
+                godIndex = 7; // 九天
+                doorAnalysis = "生门当值，大吉。此需求发展顺利，容易成功。";
+                starAnalysis = "天辅星照临，有贵人相助，技术难题易解。";
+            } else if (baseScore >= 60) {
+                doorIndex = 0; // 休门
+                starIndex = 6; // 天柱
+                godIndex = 3; // 六合
+                doorAnalysis = "休门当值，平吉。此需求需稳步推进，不可急躁。";
+                starAnalysis = "天柱星照临，需注意沟通，避免误解。";
+            } else {
+                doorIndex = 5; // 死门
+                starIndex = 1; // 天芮
+                godIndex = 4; // 白虎
+                doorAnalysis = "死门当值，凶。此需求阻力较大，需谨慎处理。";
+                starAnalysis = "天芮星照临，需注意技术风险和团队协作问题。";
+            }
+            
+            return {
+                text: `当前为${solarTerm}节气，${period}时辰局。需求基础评分为${baseScore}分。`,
+                score: baseScore,
+                door: eightDoors[doorIndex],
+                star: nineStars[starIndex],
+                god: eightGods[godIndex],
+                doorAnalysis: doorAnalysis,
+                starAnalysis: starAnalysis,
+                period: period,
+                solarTerm: solarTerm
+            };
+        }
+        
+        // 获取节气（简化版）
+        function getSolarTerm(day) {
+            const terms = [
+                "小寒", "大寒", "立春", "雨水", "惊蛰", "春分",
+                "清明", "谷雨", "立夏", "小满", "芒种", "夏至",
+                "小暑", "大暑", "立秋", "处暑", "白露", "秋分",
+                "寒露", "霜降", "立冬", "小雪", "大雪", "冬至"
+            ];
+            
+            const termIndex = Math.floor(day / 15) % 24;
+            return terms[termIndex];
+        }
+        
+        // 更新奇门九宫图
+        function updateQimenDiagram(analysis) {
+            const cells = document.querySelectorAll('.qimen-cell');
+            
+            // 中宫
+            cells[4].querySelector('.qimen-content').textContent = `${analysis.door}\n${analysis.star}`;
+            
+            // 根据分数确定吉凶方位
+            if (analysis.score >= 80) {
+                // 吉门在生门（东北），吉星在天辅（东南）
+                cells[0].querySelector('.qimen-content').textContent = "伤门\n天冲";
+                cells[1].querySelector('.qimen-content').textContent = "杜门\n天辅";
+                cells[2].querySelector('.qimen-content').textContent = "景门\n天英";
+                cells[3].querySelector('.qimen-content').textContent = "死门\n天芮";
+                cells[5].querySelector('.qimen-content').textContent = "惊门\n天柱";
+                cells[6].querySelector('.qimen-content').textContent = "开门\n天心";
+                cells[7].querySelector('.qimen-content').textContent = "休门\n天蓬";
+                cells[8].querySelector('.qimen-content').textContent = "生门\n天任";
+                
+                // 标记吉凶
+                cells[8].classList.add('good'); // 生门吉
+                cells[1].classList.add('good'); // 天辅吉
+            } else if (analysis.score >= 60) {
+                // 平局
+                cells[0].querySelector('.qimen-content').textContent = "休门\n天蓬";
+                cells[1].querySelector('.qimen-content').textContent = "生门\n天任";
+                cells[2].querySelector('.qimen-content').textContent = "伤门\n天冲";
+                cells[3].querySelector('.qimen-content').textContent = "杜门\n天辅";
+                cells[5].querySelector('.qimen-content').textContent = "景门\n天英";
+                cells[6].querySelector('.qimen-content').textContent = "死门\n天芮";
+                cells[7].querySelector('.qimen-content').textContent = "惊门\n天柱";
+                cells[8].querySelector('.qimen-content').textContent = "开门\n天心";
+            } else {
+                // 凶局
+                cells[0].querySelector('.qimen-content').textContent = "死门\n天芮";
+                cells[1].querySelector('.qimen-content').textContent = "惊门\n天柱";
+                cells[2].querySelector('.qimen-content').textContent = "开门\n天心";
+                cells[3].querySelector('.qimen-content').textContent = "休门\n天蓬";
+                cells[5].querySelector('.qimen-content').textContent = "生门\n天任";
+                cells[6].querySelector('.qimen-content').textContent = "伤门\n天冲";
+                cells[7].querySelector('.qimen-content').textContent = "杜门\n天辅";
+                cells[8].querySelector('.qimen-content').textContent = "景门\n天英";
+                
+                // 标记吉凶
+                cells[0].classList.add('bad'); // 死门凶
+            }
+        }
+        
+        // 综合占卜结果
+        function getDivinationResult(score) {
+            if (score >= 80) {
+                return {
+                    text: "✨ 奇门得利，天时地利人和，此需求大吉 ✨",
+                    class: "good"
+                };
+            } else if (score >= 60) {
+                return {
+                    text: "☯️ 奇门平和，需把握时机，稳步推进 ☯️",
+                    class: "neutral"
+                };
+            } else {
+                return {
+                    text: "💀 奇门不利，需化解阻力，谨慎行事 💀",
+                    class: "bad"
+                };
+            }
+        }
+        
+        // 显示应对策略
+        function showStrategy(analysis) {
+            // 奇门布局建议
+            if (analysis.score >= 80) {
+                layoutStrategy.innerHTML = `
+                    <p>当前奇门局大吉，建议：</p>
+                    <ul>
+                        <li>充分利用生门（东北方位）能量，从此方位开始工作</li>
+                        <li>借助天辅星（东南方位）的智慧能量，解决技术难题</li>
+                        <li>在办公区东北角放置绿色植物增强生门能量</li>
+                        <li>团队会议可选择在东南方位举行</li>
+                    </ul>
+                `;
+            } else if (analysis.score >= 60) {
+                layoutStrategy.innerHTML = `
+                    <p>当前奇门局平吉，建议：</p>
+                    <ul>
+                        <li>稳扎稳打，避免冒进</li>
+                        <li>可借助休门（北方位）能量进行休整和规划</li>
+                        <li>利用六合能量促进团队协作</li>
+                        <li>在办公区北方放置水元素物品增强休门能量</li>
+                    </ul>
+                `;
+            } else {
+                layoutStrategy.innerHTML = `
+                    <p>当前奇门局不利，建议：</p>
+                    <ul>
+                        <li>避开死门（东方位）的不利影响</li>
+                        <li>借助开门（西方位）能量突破困境</li>
+                        <li>利用天心星（中宫）智慧解决难题</li>
+                        <li>在办公区西方放置金属物品增强开门能量</li>
+                    </ul>
+                `;
+            }
+            
+            // 最佳行动时机
+            const now = new Date();
+            const hour = now.getHours();
+            let bestTime = "";
+            
+            if (analysis.score >= 80) {
+                bestTime = "立即行动，今日" + (hour < 12 ? "上午" : "下午") + "是最佳时机";
+            } else if (analysis.score >= 60) {
+                bestTime = "明日" + (hour % 2 === 0 ? "辰时（7-9点）" : "午时（11-13点）") + "开始为宜";
+            } else {
+                bestTime = "三日后" + (analysis.period % 2 === 0 ? "巳时（9-11点）" : "申时（15-17点）") + "再行动";
+            }
+            
+            timingStrategy.innerHTML = `<p>${bestTime}</p>`;
+            
+            // 方位选择建议
+            if (analysis.score >= 80) {
+                directionStrategy.innerHTML = `
+                    <p>吉利方位：东北（生门）、东南（天辅星）</p>
+                    <p>建议：</p>
+                    <ul>
+                        <li>主要工作区域选择东北方位</li>
+                        <li>技术讨论区设置在东南方位</li>
+                        <li>避免在西南方位（死门对冲）进行重要决策</li>
+                    </ul>
+                `;
+            } else if (analysis.score >= 60) {
+                directionStrategy.innerHTML = `
+                    <p>吉利方位：北（休门）、中（值符）</p>
+                    <p>建议：</p>
+                    <ul>
+                        <li>主要工作区域选择北方位</li>
+                        <li>团队协作区设置在中宫位置</li>
+                        <li>避免在东方位（伤门）进行重要沟通</li>
+                    </ul>
+                `;
+            } else {
+                directionStrategy.innerHTML = `
+                    <p>吉利方位：西（开门）、中（天心星）</p>
+                    <p>建议：</p>
+                    <ul>
+                        <li>主要工作区域选择西方位</li>
+                        <li>问题解决区设置在中宫位置</li>
+                        <li>绝对避免在东方位（死门）开展工作</li>
+                    </ul>
+                `;
+            }
+            
+            // 奇门化解方法
+            if (analysis.score >= 80) {
+                resolveStrategy.innerHTML = `
+                    <div class="ritual-item">
+                        <strong>奇门助运法</strong>
+                        <p>时机：今日${analysis.period}时</p>
+                        <p>方法：</p>
+                        <ol>
+                            <li>在东北方位点燃绿色蜡烛</li>
+                            <li>面向东南方静坐3分钟，观想成功场景</li>
+                            <li>在项目文档上画"生门符"</li>
+                            <li>团队共同诵读"奇门成功咒"三遍</li>
+                        </ol>
+                    </div>
+                `;
+            } else if (analysis.score >= 60) {
+                resolveStrategy.innerHTML = `
+                    <div class="ritual-item">
+                        <strong>奇门平稳法</strong>
+                        <p>时机：明日${analysis.period}时</p>
+                        <p>方法：</p>
+                        <ol>
+                            <li>在北方位放置一杯清水</li>
+                            <li>团队围坐，共同冥想5分钟</li>
+                            <li>在办公桌中央放置圆形物品</li>
+                            <li>轻声诵读"奇门平稳咒"七遍</li>
+                        </ol>
+                    </div>
+                `;
+            } else {
+                resolveStrategy.innerHTML = `
+                    <div class="ritual-item">
+                        <strong>奇门化解法</strong>
+                        <p>时机：三日后${analysis.period}时</p>
+                        <p>方法：</p>
+                        <ol>
+                            <li>在西方位放置金属风铃</li>
+                            <li>用盐水擦拭办公设备净化</li>
+                            <li>在东方位悬挂五帝钱化解死门</li>
+                            <li>团队共同诵读"奇门化解咒"九遍</li>
+                        </ol>
+                    </div>
+                    <div class="ritual-item">
+                        <strong>日常防护法</strong>
+                        <p>每日晨会前执行：</p>
+                        <ol>
+                            <li>团队面向西方拍手九次</li>
+                            <li>每人说出一项今日要完成的具体任务</li>
+                            <li>共同喊出"奇门护佑，诸事顺利"</li>
+                        </ol>
+                    </div>
+                `;
+            }
+        }
+        
+        // 初始化页面
+        window.onload = function() {
+            initQimenDiagram();
+        };
+    </script>
+</body>
+</html>
